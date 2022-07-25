@@ -6,14 +6,13 @@ window.addEventListener('DOMContentLoaded', (event) => {
 const createInnerHTML = () => {
     const headerHtml = "<th></th><th>Name</th><th>Gender</th><th>Department</th><th>Salary</th>"+
     "<th>Start Date</th><th>Actions</th>";
-    const innerHtml = `${headerHtml}`;
+    let innerHtml = `${headerHtml}`;
     //0 here is array[0] -1st value [1]-second value
     //let EmployeeList=createEmployeePayrollJSON()[0];
     let EmployeeList=createEmployeePayrollJSON();
     //This is for more than one array of data for multiple data using for loop
     for(const Employee of EmployeeList) {
         innerHtml=`${innerHtml}
-    }
 <tr>
     <td><img class="profile" alt="" src="${Employee._profilePic}"></td>
     <td>${Employee._name}</td>
