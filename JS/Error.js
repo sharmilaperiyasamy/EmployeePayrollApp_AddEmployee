@@ -26,12 +26,25 @@ salary.addEventListener('input', function() {
 const save=()=> {
     try{
         let Employee = createEmployeePayroll();
-        //createAndUpdateStorage(Employee);
+        createAndUpdateStorage(Employee);
     }
         catch(e)
         {
             return;
         }
+    }
+    function createAndUpdateStorage(Employee) {
+        let EmployeeList = JSON.parse(localStorage.getItem("EmployeePayrollList"));
+        if(EmployeeList != undefined)
+        {
+            EmployeeList.push(Employee);
+        }
+        else
+        {
+            EmployeeList=[Employee]
+        }
+        alert(EmployeeList.toString());
+        localStorage.setItem("EmployeePayrollList", JSON.stringify(EmployeeList));
     }
     
     const createEmployeePayroll=()=>
