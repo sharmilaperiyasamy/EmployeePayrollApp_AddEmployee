@@ -25,7 +25,8 @@
     <div class="form-head">Employee Payroll Form</div>
     <div class="row-content">
         <label class="label text" for="name">Name</label>
-        <input class="input" type="text" id="name " name="name" placeholder=""your name" required>
+        <input class="input" type="text" id="text" name="name" placeholder="your name" required>
+        <error-output class="text-error" for="text"></error-output>
     </div>
     <!-- UC3 -->
     <div class="row-content">
@@ -75,8 +76,7 @@
         <div class="row-content">
             <label class="label text" for="salary">Choose your salary: </label>
             <input class="input" type="range" name="salary" id="salary" min="300000" max="500000" step="1000" value="400000">
-            <output class="salary-output text" for="salary">400000</output>
-        
+            <output class="salary-output text" for="salary">400000</output>  
     </div>
      <!-- UC5 -->
      <div class="row-content">
@@ -165,5 +165,14 @@
     output.textContent=salary.value;
     salary.addEventListener('input', function() {
         output.textContent=salary.value;
+    });
+    const text= document.querySelector('#text');
+    const textError= document.querySelector('.text-error');
+    text.addEventListener('input', function() {
+        let nameRegex= RegExp('^[A-Z]{1}[a-zA-z]{2,}$');
+        if(nameRegex.test(text.value))
+        textError.textContent="";
+        else
+        textError.textContent="Name is Incorrect";
     });
 </script>

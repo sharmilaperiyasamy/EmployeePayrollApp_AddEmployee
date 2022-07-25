@@ -89,6 +89,11 @@ label {
     border-radius: 4px;
     resize: vertical;
 }
+error-output {
+    font-size: 12px;
+    font-style: italic;
+    color: red;
+}
 /* UC3 */
 .profile-radio-content {
     display: flex;
