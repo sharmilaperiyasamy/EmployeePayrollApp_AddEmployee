@@ -1,15 +1,24 @@
-
+let EmployeeList;
 window.addEventListener('DOMContentLoaded', (event) => {
+    EmployeeList=getEmployeePayrollDataFromStorage();
+    document.querySelector(".emp-count").textContent = EmployeeList.length;
     createInnerHTML();
 });
 
+const getEmployeePayrollDataFromStorage = () => {
+    return localStorage.getItem('EmployeePayrollList') ? 
+            JSON.parse(localStorage.getItem('EmployeePayrollList')) : [];  
+}
+
 const createInnerHTML = () => {
+   
     const headerHtml = "<th></th><th>Name</th><th>Gender</th><th>Department</th><th>Salary</th>"+
     "<th>Start Date</th><th>Actions</th>";
+    if (EmployeeList.length == 0) return;
     let innerHtml = `${headerHtml}`;
     //0 here is array[0] -1st value [1]-second value
     //let EmployeeList=createEmployeePayrollJSON()[0];
-    let EmployeeList=createEmployeePayrollJSON();
+    //let EmployeeList=createEmployeePayrollJSON();
     //This is for more than one array of data for multiple data using for loop
     for(const Employee of EmployeeList) {
         innerHtml=`${innerHtml}
@@ -27,32 +36,33 @@ const createInnerHTML = () => {
     }
     document.querySelector("#table-display").innerHTML = innerHtml;
 }
-// UC5 creating a json object to assign the data
-const createEmployeePayrollJSON = () => {
-    let empPayrollListLocal = [
-        {
-            _name: 'Saran Kumar',
-            _gender: 'male',
-            _department: ['Engineering', 'Sales'],
-            _salary: '423000',
-            _startDate: '10 June 2022',
-            _note: 'Hi',
-            _id: new Date().getTime(),
-            _profilePic: '../assets/images/photo2.png'
-        },
-        {
-            _name: 'Saranya Dev',
-            _gender: 'female',
-            _department: ['sales'],
-            _salary: '350000',
-            _startDate: '29 April 2021',
-            _note: 'Hi',
-            _id: new Date().getTime() + 1,
-            _profilePic: '../assets/images/photo1.png'
-        }
-    ];
-    return empPayrollListLocal;
-  }
+
+// // UC5 creating a json object to assign the data
+// const createEmployeePayrollJSON = () => {
+//     let empPayrollListLocal = [
+//         {
+//             _name: 'Saran Kumar',
+//             _gender: 'male',
+//             _department: ['Engineering', 'Sales'],
+//             _salary: '423000',
+//             _startDate: '10 June 2022',
+//             _note: 'Hi',
+//             _id: new Date().getTime(),
+//             _profilePic: '../assets/images/photo2.png'
+//         },
+//         {
+//             _name: 'Saranya Dev',
+//             _gender: 'female',
+//             _department: ['sales'],
+//             _salary: '350000',
+//             _startDate: '29 April 2021',
+//             _note: 'Hi',
+//             _id: new Date().getTime() + 1,
+//             _profilePic: '../assets/images/photo1.png'
+//         }
+//     ];
+//     return empPayrollListLocal;
+//   }
   const getDeptHtml = (deptList) => {
     let deptHtml = '';
     for (const dept of deptList) {
