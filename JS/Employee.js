@@ -1,4 +1,4 @@
-class Employee{
+class Employee {
     //getter and setter methods
     get id() {return this._id;}
     set id(id){
