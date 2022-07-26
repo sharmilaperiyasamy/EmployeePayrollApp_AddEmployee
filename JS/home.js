@@ -3,6 +3,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
     empPayrollList=getEmployeePayrollDataFromStorage();
    document.querySelector('.emp-count').textContent = empPayrollList.length;
    createInnerHTML();
+   localStorage.removeItem('editEmp');
 });
 
 const getEmployeePayrollDataFromStorage = () => {
@@ -27,41 +28,15 @@ const createInnerHTML = () => {
     <td>${empPayrollData._gender}</td>
     <td>${getDeptHtml(empPayrollData._department)}</td>
         <td>${empPayrollData._salary}</td>
-        <td>${empPayrollData._startDate}</td>
-        <td><img name="${empPayrollData._id}" src="../assets/images/delete.svg" onclick="remove(this)" alt="delete">
-        <img name="${empPayrollData._id}" src="../assets/images/create.svg" onclick="update(this)" alt="edit"></td>
+        <td>${stringifyDate(empPayrollData._startDate)}</td>
+        <td><img id="${empPayrollData._id}" src="../assets/images/delete.svg" onclick="remove(this)" alt="delete">
+        <img id="${empPayrollData._id}" src="../assets/images/create.svg" onclick="update(this)" alt="edit"></td>
 </tr>
    `;
     }
     document.querySelector("#table-display").innerHTML = innerHtml;
 }
 
-//UC5 creating a json object to assign the data
-// const createEmployeePayrollJSON = () => {
-//     let empPayrollListLocal = [
-//         {
-//             _name: 'Saran Kumar',
-//             _gender: 'male',
-//             _department: ['Engineering', 'Sales'],
-//             _salary: '423000',
-//             _startDate: '10 June 2022',
-//             _note: 'Hi',
-//             _id: new Date().getTime(),
-//             _profilePic: '../assets/images/photo2.png'
-//         },
-//         {
-//             _name: 'Saranya Dev',
-//             _gender: 'female',
-//             _department: ['sales'],
-//             _salary: '350000',
-//             _startDate: '29 April 2021',
-//             _note: 'Hi',
-//             _id: new Date().getTime() + 1,
-//             _profilePic: '../assets/images/photo1.png'
-//         }
-//     ];
-//     return empPayrollListLocal;
-//   }
   const getDeptHtml = (deptList) => {
     let deptHtml = '';
     for (const dept of deptList) {
@@ -69,3 +44,24 @@ const createInnerHTML = () => {
     }
     return deptHtml;
   }
+
+  const update = (node) =>
+{
+    let empPayrollData = empPayrollList.find(empData => empData._id == node.id);
+    if(!empPayrollData){return;} 
+    localStorage.setItem('editEmp', JSON.stringify(empPayrollData));
+    window.location.replace(siteProperties.add_emp_payroll_page);
+}
+
+const remove = (node) =>
+{
+    let empPayrollData = empPayrollList.find(empData => empData._id == node.id);
+    if (!empPayrollData)
+    return;
+    const index = empPayrollList.map(empData => empData._id).indexOf(empPayrollData._id);
+    empPayrollList.splice(index, 1);
+    localStorage.setItem("EmployeePayrollList", JSON.stringify(empPayrollList));
+    document.querySelector('.emp-count').textContent = empPayrollList.length;
+    createInnerHTML();
+    window.location.replace(SiteProperties.Home_Page);
+}

@@ -29,24 +29,24 @@ class Employee {
         this._salary=salary;
     }
     //date should not be a future date or not beyond 30 days
-    // get startDate() { return this._startDate; }
-    // set startDate(startDate) {
-    //     let now = new Date();
-    //     var diff = Math.abs(now.getTime() - startDate.getTime());
-    //     if (startDate > now)
-    //     {
-    //         throw "Start Date should not future date."
-    //     }
-    //     if (diff/(1000 * 60 * 60 * 24) > 30)
-    //     {
-    //         throw "Start date is beyond 30 days."
-    //     }
-    //     this._startDate = startDate; 
-    // }
-    get startDate() {return this._startDate;}
-    set startDate(startDate){
-        this._startDate=startDate;
+    get startDate() { return this._startDate; }
+    set startDate(startDate) {
+        let now = new Date();
+        var diff = Math.abs(now.getTime() - startDate.getTime());
+        if (startDate > now)
+        {
+            throw "Start Date should not future date."
+        }
+        if (diff/(1000 * 60 * 60 * 24) > 30)
+        {
+            throw "Start date is beyond 30 days."
+        }
+        this._startDate = startDate; 
     }
+    // get startDate() {return this._startDate;}
+    // set startDate(startDate){
+    //     this._startDate=startDate;
+    // }
     get note() {return this._note;}
     set note(note){
         this._note=note;
@@ -54,9 +54,9 @@ class Employee {
 
 //method
 toString() {
-    const options = { year: 'numeric', month:'long',day:'numeric'};
-    const startDate = !this.startDate ? "undefined":this.startDate.toLocaleDateString("en-US",options);
-    return "id=" + this.id+", name="+this.name+", profilePic="+this.profilePic+", gender="+this.gender
-    +", department="+this.department+", salary=" + this.salary+", startDate="+startDate+", note="+this._note;
+    const options = { year: 'numeric', month:'short', day:'numeric'};
+    const empDate = !this.startDate ? "undefined":this.startDate.toLocaleDateString("en-GB",options);
+    return "id=" + this.id+", name='"+this.name+", profilePic='"+this.profilePic+", gender='"+this.gender
+    +", department="+this.department+", salary=" + this.salary+", startDate="+empDate+", note="+this.note;
 }
 }
