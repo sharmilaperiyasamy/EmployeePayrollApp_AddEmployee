@@ -1,8 +1,8 @@
-let EmployeeList;
+let empPayrollList;
 window.addEventListener('DOMContentLoaded', (event) => {
-    EmployeeList=getEmployeePayrollDataFromStorage();
-    document.querySelector(".emp-count").textContent = EmployeeList.length;
-    createInnerHTML();
+    empPayrollList=getEmployeePayrollDataFromStorage();
+   document.querySelector('.emp-count').textContent = empPayrollList.length;
+   createInnerHTML();
 });
 
 const getEmployeePayrollDataFromStorage = () => {
@@ -11,33 +11,32 @@ const getEmployeePayrollDataFromStorage = () => {
 }
 
 const createInnerHTML = () => {
-   
+    if (empPayrollList.length == 0) return;
     const headerHtml = "<th></th><th>Name</th><th>Gender</th><th>Department</th><th>Salary</th>"+
     "<th>Start Date</th><th>Actions</th>";
-    if (EmployeeList.length == 0) return;
+    
     let innerHtml = `${headerHtml}`;
     //0 here is array[0] -1st value [1]-second value
-    //let EmployeeList=createEmployeePayrollJSON()[0];
-    //let EmployeeList=createEmployeePayrollJSON();
+    //let empPayrollList=createEmployeePayrollJSON();
     //This is for more than one array of data for multiple data using for loop
-    for(const Employee of EmployeeList) {
-        innerHtml=`${innerHtml}
+    for(const empPayrollData of empPayrollList) {
+     innerHtml=`${innerHtml}
 <tr>
-    <td><img class="profile" alt="" src="${Employee._profilePic}"></td>
-    <td>${Employee._name}</td>
-    <td>${Employee._gender}</td>
-    <td>${getDeptHtml(Employee._department)}</td>
-        <td>${Employee._salary}</td>
-        <td>${Employee._startDate}</td>
-        <td><img name="${Employee._id}" src="../assets/images/delete.svg" onclick="remove(this)" alt="delete">
-        <img name="${Employee._id}" src="../assets/images/create.svg" onclick="update(this)" alt="edit"></td>
+    <td><img class="profile" alt="" src="${empPayrollData._profilePic}"></td>
+    <td>${empPayrollData._name}</td>
+    <td>${empPayrollData._gender}</td>
+    <td>${getDeptHtml(empPayrollData._department)}</td>
+        <td>${empPayrollData._salary}</td>
+        <td>${empPayrollData._startDate}</td>
+        <td><img name="${empPayrollData._id}" src="../assets/images/delete.svg" onclick="remove(this)" alt="delete">
+        <img name="${empPayrollData._id}" src="../assets/images/create.svg" onclick="update(this)" alt="edit"></td>
 </tr>
    `;
     }
     document.querySelector("#table-display").innerHTML = innerHtml;
 }
 
-// // UC5 creating a json object to assign the data
+//UC5 creating a json object to assign the data
 // const createEmployeePayrollJSON = () => {
 //     let empPayrollListLocal = [
 //         {

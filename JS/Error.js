@@ -25,23 +25,23 @@ salary.addEventListener('input', function() {
 
 const save=()=> {
     try{
-        let Employee = createEmployeePayroll();
-        createAndUpdateStorage(Employee);
+        let employeePayrollData = createEmployeePayroll();
+        createAndUpdateStorage(employeePayrollData);
     }
         catch(e)
         {
             return;
         }
     }
-    function createAndUpdateStorage(Employee) {
+    function createAndUpdateStorage(employeePayrollData) {
         let EmployeeList = JSON.parse(localStorage.getItem("EmployeePayrollList"));
         if(EmployeeList != undefined)
         {
-            EmployeeList.push(Employee);
+            EmployeeList.push(employeePayrollData);
         }
         else
         {
-            EmployeeList=[Employee]
+            EmployeeList=[employeePayrollData]
         }
         alert(EmployeeList.toString());
         localStorage.setItem("EmployeePayrollList", JSON.stringify(EmployeeList));
@@ -49,24 +49,24 @@ const save=()=> {
     
     const createEmployeePayroll=()=>
     {
-        let Employee=new Employee();
+        let employeePayrollData=new Employee();
         try{
-            Employee.name=getInputValueById('#name');
+            employeePayrollData.name=getInputValueById('#name');
         }
         catch(e)
         {
             setTextValue('.text-error', e);
             throw e;
         }
-        Employee.profilePic=getSelectedValues('[name=profile]').pop;
-        Employee.gender=getSelectedValues('[name=gender]').pop;
-        Employee.department=getSelectedValues('[name=department]');
-        Employee.salary=getInputValueById('#salary');
-        Employee.note=getInputValueById('#notes');
+        employeePayrollData.profilePic=getSelectedValues('[name=profile]').pop();
+        employeePayrollData.gender=getSelectedValues('[name=gender]').pop();
+        employeePayrollData.department=getSelectedValues('[name=department]');
+        employeePayrollData.salary=getInputValueById('#salary');
+        employeePayrollData.note=getInputValueById('#notes');
         let date=getInputValueById('#day')+" "+getInputValueById('#month')+" "+getInputValueById('#year');
-        Employee.date=Date.parse(date);
-        alert(Employee.toString());
-        return Employee;
+        employeePayrollData.date=Date.parse(date);
+        alert(employeePayrollData.toString());
+        return employeePayrollData;
     }
     const getSelectedValues = (propertyValue)=>
     {
