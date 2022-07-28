@@ -127,6 +127,10 @@ td:first-child {
     display: flex;
     align-items: center;
 }
+td img {
+    cursor: pointer;
+}
+
 td img:first-child {
     margin-right: 10px;
 }

@@ -1,21 +1,51 @@
 let empPayrollList;
 window.addEventListener('DOMContentLoaded', (event) => {
-    empPayrollList=getEmployeePayrollDataFromStorage();
+    //empPayrollList=getEmployeePayrollDataFromStorage();
+    if (siteProperties.use_local_storage.match("true"))
+    {
+      getEmployeeData();
+    }
+    else
+    {
+      getDataFromServer();
+    }
+  });
+  
+  function getEmployeeData()
+  {
+    empPayrollList = localStorage.getItem('EmployeePayrollList') ? JSON.parse(localStorage.getItem('EmployeePayrollList')) : [];
+    processEmployeePayrollDataResponse();
+  }
+  
+  function processEmployeePayrollDataResponse()
+  {
    document.querySelector('.emp-count').textContent = empPayrollList.length;
    createInnerHTML();
    localStorage.removeItem('editEmp');
-});
-
-const getEmployeePayrollDataFromStorage = () => {
-    return localStorage.getItem('EmployeePayrollList') ? 
-            JSON.parse(localStorage.getItem('EmployeePayrollList')) : [];  
+}
+function getDataFromServer() 
+{
+  makeServiceCall("GET", siteProperties.server_url, true)
+      .then(responseText =>{
+          empPayrollList = JSON.parse(responseText);
+          processEmployeePayrollDataResponse();
+      })
+      .catch(error => {
+          console.log("Get Error Status: " + JSON.stringify(error));
+          empPayrollList = [];
+          processEmployeePayrollDataResponse();
+      });
 }
 
+// const getEmployeePayrollDataFromStorage = () => {
+//     return localStorage.getItem('EmployeePayrollList') ? 
+//             JSON.parse(localStorage.getItem('EmployeePayrollList')) : [];  
+// }
+
 const createInnerHTML = () => {
-    if (empPayrollList.length == 0) return;
     const headerHtml = "<th></th><th>Name</th><th>Gender</th><th>Department</th><th>Salary</th>"+
     "<th>Start Date</th><th>Actions</th>";
-    
+    if (empPayrollList.length == 0) return;
     let innerHtml = `${headerHtml}`;
     //0 here is array[0] -1st value [1]-second value
     //let empPayrollList=createEmployeePayrollJSON();
@@ -29,8 +59,8 @@ const createInnerHTML = () => {
     <td>${getDeptHtml(empPayrollData._department)}</td>
         <td>${empPayrollData._salary}</td>
         <td>${stringifyDate(empPayrollData._startDate)}</td>
-        <td><img id="${empPayrollData._id}" src="../assets/images/delete.svg" onclick="remove(this)" alt="delete">
-        <img id="${empPayrollData._id}" src="../assets/images/create.svg" onclick="update(this)" alt="edit"></td>
+        <td><img id="${empPayrollData.id}" src="../assets/images/delete.svg" onclick="remove(this)" alt="delete">
+        <img id="${empPayrollData.id}" src="../assets/images/create.svg" onclick="update(this)" alt="edit"></td>
 </tr>
    `;
     }
@@ -47,7 +77,7 @@ const createInnerHTML = () => {
 
   const update = (node) =>
 {
-    let empPayrollData = empPayrollList.find(empData => empData._id == node.id);
+    let empPayrollData = empPayrollList.find(empData => empData._id == node._id);
     if(!empPayrollData){return;} 
     localStorage.setItem('editEmp', JSON.stringify(empPayrollData));
     window.location.replace(siteProperties.add_emp_payroll_page);
@@ -55,13 +85,44 @@ const createInnerHTML = () => {
 
 const remove = (node) =>
 {
-    let empPayrollData = empPayrollList.find(empData => empData._id == node.id);
+    let empPayrollData = empPayrollList.find(empData => empData._id == node._id);
     if (!empPayrollData)
     return;
     const index = empPayrollList.map(empData => empData._id).indexOf(empPayrollData._id);
     empPayrollList.splice(index, 1);
+    if(siteProperties.use_local_storage.match("true"))
+    {
     localStorage.setItem("EmployeePayrollList", JSON.stringify(empPayrollList));
     document.querySelector('.emp-count').textContent = empPayrollList.length;
     createInnerHTML();
-    window.location.replace(SiteProperties.Home_Page);
+    window.location.replace(siteProperties.Home_Page);
+}
+else{
+    const deleteUrl = siteProperties.server_url + empData._id.toString();
+    makeServiceCall("DELETE", deleteUrl, false)
+        .then(responseText =>{
+            createInnerHTML();
+        })
+        .catch(error =>{
+            console.log("Delete Error Status: " + JSON.stringify(error));
+        });
+}
+}
+function checkName(name)
+{
+    let nameRegex = RegExp('^[A-Z]{1}[a-zA-Z\\s]{2,}$');
+    if (!nameRegex.test(name)) throw 'Name is Incorrect!';
+}
+function checkStartDate(startDate)
+{
+    let now = new Date();
+    if (startDate > now)
+    {
+        throw "Start Date should not future date."
+    }
+    var diff = Math.abs(now.getTime() - startDate.getTime());
+    if (diff/(1000 * 60 * 60 * 24) > 30)
+    {
+        throw "Start date is beyond 30 days."
+    }
 }
